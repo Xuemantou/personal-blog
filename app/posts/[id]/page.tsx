@@ -46,7 +46,7 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
               📅 {postData.date}
             </span>
             <span className="md-body-medium" style={{ color: 'var(--md-on-surface-variant)' }}>
-              · 阅读时间约 5 分钟
+              · 阅读时间约 {postData.readingTime} 分钟
             </span>
           </div>
         </div>
