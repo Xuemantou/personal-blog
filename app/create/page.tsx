@@ -3,6 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const MDEditor = dynamic(
+  () => import('@uiw/react-md-editor').then((mod) => mod.default),
+  { ssr: false }
+);
 
 export default function CreatePost() {
   const router = useRouter();
@@ -106,7 +112,7 @@ export default function CreatePost() {
             />
           </div>
 
-          {/* Content Textarea */}
+          {/* Content Editor */}
           <div>
             <label
               htmlFor="content"
@@ -115,30 +121,15 @@ export default function CreatePost() {
             >
               文章内容（Markdown）
             </label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="开始写作... 支持 Markdown 语法"
-              rows={20}
-              className="md-outlined-field font-mono text-sm resize-y"
-              required
-            />
-          </div>
-
-          {/* Markdown Tips */}
-          <div
-            className="md-surface-dim p-4"
-          >
-            <p className="md-label-large mb-2" style={{ color: 'var(--md-on-surface)' }}>
-              💡 Markdown 快速提示：
-            </p>
-            <ul className="md-body-medium space-y-1 list-disc list-inside" style={{ color: 'var(--md-on-surface-variant)' }}>
-              <li><code className="px-1 rounded" style={{ background: 'var(--md-primary-container)', color: 'var(--md-on-primary-container)' }}># 标题</code></li>
-              <li><code className="px-1 rounded" style={{ background: 'var(--md-primary-container)', color: 'var(--md-on-primary-container)' }}>**粗体**</code></li>
-              <li><code className="px-1 rounded" style={{ background: 'var(--md-primary-container)', color: 'var(--md-on-primary-container)' }}>[链接](url)</code></li>
-              <li><code className="px-1 rounded" style={{ background: 'var(--md-primary-container)', color: 'var(--md-on-primary-container)' }}>```代码```</code></li>
-            </ul>
+            <div data-color-mode="light">
+              <MDEditor
+                value={content}
+                onChange={(val) => setContent(val || '')}
+                preview="live"
+                height={500}
+                style={{ borderRadius: '12px' }}
+              />
+            </div>
           </div>
 
           {/* Submit Button */}
