@@ -1,26 +1,72 @@
 "use client";
 
-export default function Comments() {
+import { useEffect, useRef } from "react";
+
+interface GiscusConfig {
+  repo: string;           // "owner/repo"
+  repoId: string;          // "R_xxx"
+  category: string;        // "Announcements"
+  categoryId: string;      // "DIC_xxx"
+  mapping?: string;        // "pathname" | "url" | "title" | ...
+  strict?: string;         // "0" | "1"
+  reactionsEnabled?: string; // "1" | "0"
+  emitMetadata?: string;   // "0" | "1"
+  inputPosition?: string;  // "bottom" | "top"
+  lang?: string;           // "zh-CN" | "en" | ...
+}
+
+export default function Comments({ config }: { config: GiscusConfig }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scriptRef = useRef<HTMLScriptElement | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // 清理旧脚本
+    if (scriptRef.current) {
+      scriptRef.current.remove();
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", config.repo);
+    script.setAttribute("data-repo-id", config.repoId);
+    script.setAttribute("data-category", config.category);
+    script.setAttribute("data-category-id", config.categoryId);
+    script.setAttribute("data-mapping", config.mapping || "pathname");
+    script.setAttribute("data-strict", config.strict || "0");
+    script.setAttribute("data-reactions-enabled", config.reactionsEnabled || "1");
+    script.setAttribute("data-emit-metadata", config.emitMetadata || "0");
+    script.setAttribute("data-input-position", config.inputPosition || "bottom");
+    script.setAttribute("data-theme", "preferred_color_scheme");
+    script.setAttribute("data-lang", config.lang || "zh-CN");
+    script.setAttribute("data-loading", "lazy");
+    script.crossOrigin = "anonymous";
+    script.async = true;
+
+    containerRef.current.appendChild(script);
+    scriptRef.current = script;
+
+    return () => {
+      if (scriptRef.current) {
+        scriptRef.current.remove();
+        scriptRef.current = null;
+      }
+    };
+  }, [config]);
+
   return (
     <div>
-      <p className="md-body-large mb-4" style={{ color: 'var(--md-on-surface-variant)' }}>
-        评论功能已启用。请在 GitHub 上登录后发表评论。
-      </p>
       <div
-        className="md-surface-dim p-4"
-      >
-        <p className="md-body-medium" style={{ color: 'var(--md-on-surface-variant)' }}>
-          提示：要使用评论功能，请在 app/posts/[id]/page.tsx 中配置 Giscus 或其他评论系统。
+        className="giscus"
+        ref={containerRef}
+        style={{ minHeight: "150px" }}
+      />
+      <noscript>
+        <p className="md-body-medium mt-4" style={{ color: 'var(--md-on-surface-variant)' }}>
+          请启用 JavaScript 以加载评论功能。
         </p>
-        <p className="md-body-medium mt-2" style={{ color: 'var(--md-on-surface-variant)' }}>
-          Giscus 配置步骤：
-        </p>
-        <ol className="md-body-medium mt-2 list-decimal list-inside space-y-1" style={{ color: 'var(--md-on-surface-variant)' }}>
-          <li>在 GitHub 上启用 Discussions</li>
-          <li>访问 https://giscus.app 获取配置</li>
-          <li>将生成的脚本添加到此组件中</li>
-        </ol>
-      </div>
+      </noscript>
     </div>
   );
 }

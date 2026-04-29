@@ -41,7 +41,7 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className="mt-16" style={{ background: 'var(--md-surface-dim)', backdropFilter: 'blur(12px)' }}>
+    <footer className="mt-16 md-surface-dim">
       <div className="max-w-4xl mx-auto px-6 py-10 text-center">
         <p className="md-body-medium" style={{ color: 'var(--md-on-surface-variant)' }}>
           © {new Date().getFullYear()} 我的个人博客

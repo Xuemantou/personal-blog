@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* Material 3 Color System */
-  --md-primary: #6750A4;
+  /* Material 3 Color System - 海港蓝主题 */
+  --md-primary: #3A6EA5;
   --md-on-primary: #FFFFFF;
-  --md-primary-container: #EADDFF;
-  --md-on-primary-container: #21005D;
-  --md-secondary: #625B71;
+  --md-primary-container: #D4E4F7;
+  --md-on-primary-container: #0A1F3D;
+  --md-secondary: #5A7A96;
   --md-on-secondary: #FFFFFF;
-  --md-secondary-container: #E8DEF8;
-  --md-on-secondary-container: #1D192B;
-  --md-tertiary: #7D5260;
-  --md-surface: rgba(255, 255, 255, 0.85);
-  --md-surface-dim: rgba(255, 255, 255, 0.7);
-  --md-on-surface: #1C1B1F;
-  --md-on-surface-variant: #49454F;
-  --md-outline: #79747E;
-  --md-outline-variant: #CAC4D0;
+  --md-secondary-container: #D0DDE8;
+  --md-on-secondary-container: #1A2F3F;
+  --md-tertiary: #9A7B54;
+  --md-surface: rgba(232, 240, 248, 0.85);
+  --md-surface-dim: rgba(232, 240, 248, 0.70);
+  --md-on-surface: #1A252F;
+  --md-on-surface-variant: #4A6078;
+  --md-outline: #8FA3B8;
+  --md-outline-variant: #C0CED8;
   --md-error: #B3261E;
   --md-on-error: #FFFFFF;
   --md-error-container: #F9DEDC;
 
-  /* Elevation shadows */
-  --md-elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
-  --md-elevation-2: 0 2px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
-  --md-elevation-3: 0 4px 12px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08);
-  --md-elevation-4: 0 8px 24px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08);
+  /* Elevation shadows - 深蓝调阴影 */
+  --md-elevation-1: 0 1px 3px rgba(10, 30, 55, 0.12), 0 1px 2px rgba(10, 30, 55, 0.08);
+  --md-elevation-2: 0 2px 6px rgba(10, 30, 55, 0.12), 0 2px 4px rgba(10, 30, 55, 0.08);
+  --md-elevation-3: 0 4px 12px rgba(10, 30, 55, 0.12), 0 4px 8px rgba(10, 30, 55, 0.08);
+  --md-elevation-4: 0 8px 24px rgba(10, 30, 55, 0.12), 0 8px 16px rgba(10, 30, 55, 0.08);
 }
 
 /* Background image layer */
@@ -43,7 +43,7 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(15, 35, 65, 0.40);
 }
 
 body {
@@ -219,13 +219,13 @@ body {
 
 /* Prose overrides for Material style */
 .prose-material {
-  --tw-prose-body: var(--md-on-surface-variant);
+  --tw-prose-body: var(--md-on-surface);
   --tw-prose-headings: var(--md-on-surface);
   --tw-prose-links: var(--md-primary);
   --tw-prose-bold: var(--md-on-surface);
   --tw-prose-code: var(--md-tertiary);
-  --tw-prose-pre-bg: #1C1B1F;
-  --tw-prose-pre-code: #E6E1E5;
+  --tw-prose-pre-bg: #0D1B2A !important;
+  --tw-prose-pre-code: #D4E4F7;
   max-width: none;
 }
 
@@ -233,6 +233,20 @@ body {
   border-radius: 0.75rem;
   box-shadow: var(--md-elevation-3);
   border: none;
+  background: #0D1B2A !important;
+  color: #D4E4F7;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.prose-material pre code {
+  background: transparent !important;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
 }
 
 .prose-material blockquote {

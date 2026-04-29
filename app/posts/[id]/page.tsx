@@ -70,7 +70,17 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
             评论区
           </h3>
         </div>
-        <Comments />
+        <Comments config={{
+          repo: process.env.NEXT_PUBLIC_GISCUS_REPO || "your-org/your-repo",
+          repoId: process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "YOUR_REPO_ID",
+          category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY || "Announcements",
+          categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "YOUR_CATEGORY_ID",
+          mapping: "pathname",
+          reactionsEnabled: "1",
+          emitMetadata: "0",
+          inputPosition: "bottom",
+          lang: "zh-CN",
+        }} />
       </div>
     </main>
   );
