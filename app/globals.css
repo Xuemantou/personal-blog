@@ -1,24 +1,259 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #1e293b;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
+  /* Material 3 Color System */
+  --md-primary: #6750A4;
+  --md-on-primary: #FFFFFF;
+  --md-primary-container: #EADDFF;
+  --md-on-primary-container: #21005D;
+  --md-secondary: #625B71;
+  --md-on-secondary: #FFFFFF;
+  --md-secondary-container: #E8DEF8;
+  --md-on-secondary-container: #1D192B;
+  --md-tertiary: #7D5260;
+  --md-surface: rgba(255, 255, 255, 0.85);
+  --md-surface-dim: rgba(255, 255, 255, 0.7);
+  --md-on-surface: #1C1B1F;
+  --md-on-surface-variant: #49454F;
+  --md-outline: #79747E;
+  --md-outline-variant: #CAC4D0;
+  --md-error: #B3261E;
+  --md-on-error: #FFFFFF;
+  --md-error-container: #F9DEDC;
+
+  /* Elevation shadows */
+  --md-elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  --md-elevation-2: 0 2px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+  --md-elevation-3: 0 4px 12px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08);
+  --md-elevation-4: 0 8px 24px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #e2e8f0;
-    --primary: #60a5fa;
-    --primary-hover: #3b82f6;
-  }
+/* Background image layer */
+.md-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url('/87444298_p0.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.md-bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.45);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--md-on-surface);
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: 0;
 }
 
+/* Material Design Typography */
+.md-headline-large {
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 2.5rem;
+  letter-spacing: 0;
+}
+
+.md-headline-medium {
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 2.25rem;
+  letter-spacing: 0;
+}
+
+.md-title-large {
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+}
+
+.md-title-medium {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: 0.00938rem;
+}
+
+.md-body-large {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  letter-spacing: 0.03125rem;
+}
+
+.md-body-medium {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.01563rem;
+}
+
+.md-label-large {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: 0.00625rem;
+}
+
+/* Material Surface Card */
+.md-surface {
+  background: var(--md-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 1rem;
+  box-shadow: var(--md-elevation-2);
+  color: var(--md-on-surface);
+}
+
+.md-surface-dim {
+  background: var(--md-surface-dim);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0.75rem;
+  color: var(--md-on-surface);
+}
+
+/* Material Buttons */
+.md-btn-filled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  border: none;
+  border-radius: 9999px;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.00625rem;
+  cursor: pointer;
+  box-shadow: var(--md-elevation-1);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.md-btn-filled:hover {
+  box-shadow: var(--md-elevation-3);
+  background: var(--md-primary);
+  filter: brightness(1.08);
+}
+
+.md-btn-filled:active {
+  box-shadow: var(--md-elevation-1);
+}
+
+.md-btn-tonal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+  border: none;
+  border-radius: 9999px;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.00625rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.md-btn-tonal:hover {
+  box-shadow: var(--md-elevation-1);
+  filter: brightness(0.95);
+}
+
+/* Material Outlined Text Field */
+.md-outlined-field {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--md-outline);
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--md-on-surface);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.md-outlined-field:focus {
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 1px var(--md-primary);
+}
+
+.md-outlined-field::placeholder {
+  color: var(--md-outline);
+}
+
+/* Material Chip */
+.md-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1px solid var(--md-outline-variant);
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--md-on-surface-variant);
+  background: transparent;
+}
+
+/* Material Navigation Bar */
+.md-nav-bar {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--md-elevation-2);
+  border-bottom: none;
+}
+
+/* Prose overrides for Material style */
+.prose-material {
+  --tw-prose-body: var(--md-on-surface-variant);
+  --tw-prose-headings: var(--md-on-surface);
+  --tw-prose-links: var(--md-primary);
+  --tw-prose-bold: var(--md-on-surface);
+  --tw-prose-code: var(--md-tertiary);
+  --tw-prose-pre-bg: #1C1B1F;
+  --tw-prose-pre-code: #E6E1E5;
+  max-width: none;
+}
+
+.prose-material pre {
+  border-radius: 0.75rem;
+  box-shadow: var(--md-elevation-3);
+  border: none;
+}
+
+.prose-material blockquote {
+  border-left: 4px solid var(--md-primary);
+  padding-left: 1rem;
+  color: var(--md-on-surface-variant);
+}
+
+.prose-material code {
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.prose-material a {
+  color: var(--md-primary);
+  text-decoration: none;
+}
+
+.prose-material a:hover {
+  text-decoration: underline;
+}
