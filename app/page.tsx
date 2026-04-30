@@ -1,60 +1,75 @@
 import Link from "next/link";
-import { getSortedPostsData } from "@/lib/posts";
 
-export default async function Home() {
-  const allPostsData = await getSortedPostsData();
+export default function Home() {
+  const navItems = [
+    {
+      title: "GitHub",
+      description: "查看我的开源项目与代码",
+      href: "https://github.com/Xuemantou",
+      icon: (
+        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+        </svg>
+      ),
+    },
+    {
+      title: "文章列表",
+      description: "阅读我的博客文章",
+      href: "/posts",
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      ),
+    },
+    {
+      title: "B站主页",
+      description: "关注我的B站频道",
+      href: "https://space.bilibili.com/12999146",
+      icon: (
+        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.659.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4l.027.027c.249.248.373.551.373.907 0 .355-.124.657-.373.906L17.813 4.653zM7.44 8.347c-.373 0-.702.124-.987.373-.284.249-.427.569-.427.96 0 .373.143.693.427.96.285.268.614.4.987.4.373 0 .693-.132.96-.4.267-.249.4-.569.4-.96 0-.373-.133-.693-.4-.96-.267-.249-.587-.373-.96-.373zm8.427.267c.071-.071.159-.107.267-.107.107 0 .195.036.267.107L17.8 10.08c.071.071.107.159.107.267 0 .107-.036.195-.107.267l-.693.693c-.071.071-.159.107-.267.107-.107 0-.195-.036-.267-.107l-1.6-1.6c-.071-.071-.107-.159-.107-.267 0-.107.036-.195.107-.267l.693-.693zM7.44 11.52c-.373 0-.702.124-.987.373-.284.249-.427.569-.427.96 0 .391.143.711.427.96.285.268.614.4.987.4.373 0 .693-.132.96-.4.267-.249.4-.569.4-.96 0-.373-.133-.693-.4-.96-.267-.249-.587-.373-.96-.373zm8.427 0c-.071 0-.159.036-.267.107l-.693.693c-.071.071-.107.159-.107.267 0 .107.036.195.107.267l1.6 1.6c.071.071.159.107.267.107.107 0 .195-.036.267-.107l.693-.693c.071-.071.107-.159.107-.267 0-.107-.036-.195-.107-.267l-1.6-1.6c-.071-.071-.159-.107-.267-.107z" />
+        </svg>
+      ),
+    },
+  ];
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
-      {/* Hero Section */}
       <section className="text-center mb-16">
-        <div
-          className="md-chip mx-auto mb-6"
-        >
-          ✨ 欢迎来到我的个人博客
+        <div className="md-chip mx-auto mb-6" style={{ background: 'var(--md-surface)', boxShadow: 'var(--md-elevation-2)' }}>
+          ✨ 阿千の万事屋
         </div>
         <h1 className="md-headline-large mb-4" style={{ color: '#FFFFFF' }}>
-          分享技术与思考
+          
         </h1>
         <p className="md-body-large" style={{ color: 'rgba(255,255,255,0.78)' }}>
-          在这里记录我的学习旅程、技术探索和生活感悟
+          君埋泉下泥销骨，我寄人间雪满头。
         </p>
       </section>
 
-      {/* Articles Section */}
       <section>
-        <h2 className="md-headline-medium mb-6" style={{ color: '#FFFFFF' }}>
-          最新文章
-        </h2>
-
-        <div className="grid gap-4">
-          {allPostsData.map(({ id, date, title }) => (
-            <article key={id} className="md-surface p-6 transition-all duration-200 hover:shadow-lg" style={{ boxShadow: 'var(--md-elevation-3)' }}>
-              <Link href={`/posts/${id}`} className="block no-underline">
-                <div className="flex items-start gap-4">
-                  <div
-                    className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: 'var(--md-primary-container)' }}
-                  >
-                    <span className="text-lg">📝</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3
-                      className="md-title-large mb-2"
-                      style={{ color: 'var(--md-on-surface)' }}
-                    >
-                      {title}
-                    </h3>
-                    <div className="flex items-center gap-3">
-                      <span className="md-chip">
-                        <span style={{ color: 'var(--md-primary)' }}>●</span>
-                        {date}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </article>
+        <div className="grid gap-6 md:grid-cols-3">
+          {navItems.map((item) => (
+            <a
+              key={item.title}
+              href={item.href}
+              className="md-surface p-8 text-center no-underline transition-all duration-200 hover:shadow-xl"
+              style={{ boxShadow: 'var(--md-elevation-3)', textDecoration: 'none' }}
+            >
+              <div
+                className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                style={{ background: 'var(--md-primary-container)' }}
+              >
+                <span style={{ color: 'var(--md-primary)' }}>{item.icon}</span>
+              </div>
+              <h3 className="md-title-large mb-2" style={{ color: 'var(--md-on-surface)' }}>
+                {item.title}
+              </h3>
+              <p className="md-body-medium" style={{ color: 'var(--md-on-surface-variant)' }}>
+                {item.description}
+              </p>
+            </a>
           ))}
         </div>
       </section>

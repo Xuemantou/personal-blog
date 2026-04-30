@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "我的个人博客",
-  description: "分享技术、生活和思考",
+  title: "阿千の万事屋",
+  description: "君埋泉下泥销骨，我寄人间雪满头。",
 };
 
 function Header() {
@@ -12,14 +13,11 @@ function Header() {
     <header className="sticky top-0 z-50 md-nav-bar">
       <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 no-underline">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: 'var(--md-primary)' }}
-          >
-            <span style={{ color: 'var(--md-on-primary)', fontWeight: 700, fontSize: '1.125rem' }}>B</span>
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+            <Image src="/profile icon.jpg" alt="logo" width={40} height={40} className="object-cover" />
           </div>
           <span className="md-title-large" style={{ color: 'var(--md-on-surface)' }}>
-            我的博客
+            阿千の万事屋
           </span>
         </Link>
         <nav className="flex items-center gap-4">
@@ -29,6 +27,13 @@ function Header() {
             style={{ color: 'var(--md-on-surface-variant)' }}
           >
             首页
+          </Link>
+          <Link
+            href="/posts"
+            className="md-label-large no-underline"
+            style={{ color: 'var(--md-on-surface-variant)' }}
+          >
+            文章
           </Link>
           <Link href="/create" className="md-btn-filled no-underline">
             ✍️ 写文章
