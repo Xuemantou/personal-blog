@@ -22,8 +22,19 @@ export async function GET() {
   }
 }
 
-// 创建新文章
+// 创建新文章（需要鉴权）
 export async function POST(request: NextRequest) {
+  // 验证 auth token
+  const adminToken = process.env.ADMIN_TOKEN;
+  const authToken = request.cookies.get('auth_token')?.value;
+
+  // 如果未配置 ADMIN_TOKEN 或为默认值，放行（开发模式）
+  if (adminToken && adminToken !== 'your-secret-token-here') {
+    if (authToken !== adminToken) {
+      return NextResponse.json({ error: '未授权，请先登录' }, { status: 401 });
+    }
+  }
+
   try {
     const body = await request.json();
     const { title, content } = body;

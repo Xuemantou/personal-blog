@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ThemeToggle from "./components/ThemeToggle";
@@ -10,7 +11,14 @@ export const metadata: Metadata = {
   description: "君埋泉下泥销骨，我寄人间雪满头。",
 };
 
-function Header() {
+async function Header() {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get('auth_token')?.value;
+  const adminToken = process.env.ADMIN_TOKEN;
+  const isLoggedIn = adminToken && adminToken !== 'your-secret-token-here'
+    ? authToken === adminToken
+    : true; // 开发模式始终显示
+
   return (
     <header className="sticky top-0 z-50 md-nav-bar">
       <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -37,9 +45,21 @@ function Header() {
           >
             文章
           </Link>
-          <Link href="/create" className="md-btn-filled no-underline">
-            ✍️ 写文章
-          </Link>
+          {isLoggedIn && (
+            <Link href="/create" className="md-btn-filled no-underline">
+              ✍️ 写文章
+            </Link>
+          )}
+          {!isLoggedIn && (
+            <Link
+              href="/login"
+              className="md-icon-btn no-underline"
+              title="管理登录"
+              style={{ color: 'var(--md-on-surface-variant)' }}
+            >
+              🔐
+            </Link>
+          )}
           <ThemeToggle />
         </nav>
       </div>
