@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import "./globals.css";
+import { ThemeProvider } from "./components/ThemeProvider";
+import ThemeToggle from "./components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "阿千の万事屋",
@@ -38,6 +40,7 @@ function Header() {
           <Link href="/create" className="md-btn-filled no-underline">
             ✍️ 写文章
           </Link>
+          <ThemeToggle />
         </nav>
       </div>
     </header>
@@ -65,15 +68,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
       <body>
-        <div className="md-bg" />
-        <div className="md-bg-overlay" />
-        <div className="relative min-h-screen flex flex-col">
-          <Header />
-          <div className="flex-1">{children}</div>
-          <Footer />
-        </div>
+        <ThemeProvider>
+          <div className="md-bg" />
+          <div className="md-bg-overlay" />
+          <div className="relative min-h-screen flex flex-col">
+            <Header />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

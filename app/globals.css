@@ -210,11 +210,37 @@ body {
 
 /* Material Navigation Bar */
 .md-nav-bar {
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--md-surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: var(--md-elevation-2);
   border-bottom: none;
+}
+
+/* Dark theme overrides */
+[data-theme='dark'] {
+  --md-primary: #6B9FD4;
+  --md-on-primary: #0A1F3D;
+  --md-primary-container: #1A3A5C;
+  --md-on-primary-container: #D4E4F7;
+  --md-secondary: #7A9BB5;
+  --md-on-secondary: #0D1B2A;
+  --md-secondary-container: #2A3F50;
+  --md-on-secondary-container: #D0DDE8;
+  --md-tertiary: #C4A574;
+  --md-surface: rgba(20, 35, 55, 0.88);
+  --md-surface-dim: rgba(15, 30, 50, 0.80);
+  --md-on-surface: #E0E8F0;
+  --md-on-surface-variant: #9AADC0;
+  --md-outline: #5A7A96;
+  --md-outline-variant: #2A3F50;
+  --md-error: #F2B8B5;
+  --md-on-error: #601410;
+  --md-error-container: #8C1D18;
+}
+
+[data-theme='dark'] .md-bg-overlay {
+  background: rgba(5, 15, 30, 0.65);
 }
 
 /* Prose overrides for Material style */
