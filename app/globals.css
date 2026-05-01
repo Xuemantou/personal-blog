@@ -33,7 +33,7 @@
   position: fixed;
   inset: 0;
   z-index: -2;
-  background-image: url('/87444298_p0.jpg');
+  background-image: url('/background.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -43,7 +43,7 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: rgba(15, 35, 65, 0.40);
+  background: rgba(var(--md-overlay-rgb, 15, 35, 65), 0.40);
 }
 
 body {
@@ -240,7 +240,7 @@ body {
 }
 
 [data-theme='dark'] .md-bg-overlay {
-  background: rgba(5, 15, 30, 0.65);
+  background: rgba(var(--md-overlay-rgb, 5, 15, 30), 0.65);
 }
 
 /* Prose overrides for Material style */

@@ -9,6 +9,9 @@ import ThemeToggle from "./components/ThemeToggle";
 export const metadata: Metadata = {
   title: "阿千の万事屋",
   description: "君埋泉下泥销骨，我寄人间雪满头。",
+  icons: {
+    icon: "/profile icon.jpg",
+  },
 };
 
 async function Header() {
@@ -72,7 +75,7 @@ function Footer() {
     <footer className="mt-16 md-surface-dim">
       <div className="max-w-4xl mx-auto px-6 py-10 text-center">
         <p className="md-body-medium" style={{ color: 'var(--md-on-surface-variant)' }}>
-          © {new Date().getFullYear()} 我的个人博客
+          © {new Date().getFullYear()} 阿千の万事屋
         </p>
         <p className="md-body-medium mt-1" style={{ color: 'var(--md-outline)' }}>
           Powered by Next.js & Tailwind CSS
