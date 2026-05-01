@@ -7,6 +7,7 @@
 - **框架**: Next.js 15 (App Router)
 - **语言**: TypeScript
 - **样式**: Tailwind CSS + Material Design 3
+- **配色**: Material You 莫奈取色（@material/material-color-utilities）
 - **编辑器**: @uiw/react-md-editor (可视化 Markdown 编辑器)
 - **评论**: Giscus (基于 GitHub Discussions)
 - **文章格式**: Markdown
@@ -17,6 +18,7 @@
 - Markdown 文章渲染与在线编写
 - 评论区 (Giscus)
 - 响应式设计，支持暗色/亮色主题自动切换
+- Material You 莫奈取色：主题配色从背景图片自动提取
 - 管理员鉴权系统（Token 认证）
 - 静态站点生成 (SSG)
 
@@ -41,6 +43,18 @@ npm start
 
 访问 http://localhost:3000
 
+## 自定义背景与配色
+
+### 更换背景图片
+
+将 `public/background.jpg` 替换为任意图片，刷新页面即可。主题配色会根据图片自动重新提取。
+
+支持的格式：`jpg`、`png`、`webp` 等浏览器支持的格式。
+
+### 配色原理
+
+使用 Google Material Design 团队维护的 [material-color-utilities](https://github.com/material-foundation/material-color-utilities) 库，从背景图片提取主色调，通过 HCT 感知均匀色彩空间生成完整的 Material Design 3 配色方案（27 个语义颜色角色）。每次页面加载时重新提取，更换背景图片后配色自动更新。
+
 ## 目录结构
 
 ```
@@ -57,7 +71,10 @@ npm start
 │       └── auth/login/   # 登录 API
 ├── components/            # React 组件
 │   ├── Comments.tsx      # 评论区组件
+│   ├── ThemeProvider.tsx # 主题提供者（莫奈取色）
 │   └── ThemeToggle.tsx   # 主题切换组件
+├── utils/                 # 工具函数
+│   └── colorExtractor.ts # 颜色提取工具
 ├── lib/                   # 工具函数
 │   └── posts.ts          # 文章处理逻辑
 ├── posts/                 # Markdown 文章目录
