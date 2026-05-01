@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ThemeToggle from "./components/ThemeToggle";
+import { validateSession } from "./lib/auth";
 
 export const metadata: Metadata = {
   title: "阿千の万事屋",
@@ -17,10 +18,7 @@ export const metadata: Metadata = {
 async function Header() {
   const cookieStore = await cookies();
   const authToken = cookieStore.get('auth_token')?.value;
-  const adminToken = process.env.ADMIN_TOKEN;
-  const isLoggedIn = adminToken && adminToken !== 'your-secret-token-here'
-    ? authToken === adminToken
-    : true; // 开发模式始终显示
+  const isLoggedIn = validateSession(authToken);
 
   return (
     <header className="sticky top-0 z-50 md-nav-bar">

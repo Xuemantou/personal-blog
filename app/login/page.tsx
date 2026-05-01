@@ -28,11 +28,13 @@ export default function LoginPage() {
 
       if (response.ok) {
         router.push(from);
+      } else if (response.status === 429) {
+        setError(data.error || '操作过于频繁，请稍后再试');
       } else {
-        setError(data.error || '登录失败');
+        setError(data.error || '认证失败');
       }
     } catch {
-      setError('网络错误，请重试');
+      setError('网络错误，请检查连接后重试');
     } finally {
       setLoading(false);
     }
