@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { useTheme } from 'next-themes';
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
@@ -12,6 +13,7 @@ const MDEditor = dynamic(
 
 export default function CreatePost() {
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
@@ -121,7 +123,7 @@ export default function CreatePost() {
             >
               文章内容（Markdown）
             </label>
-            <div data-color-mode="light">
+            <div data-color-mode={resolvedTheme || 'light'}>
               <MDEditor
                 value={content}
                 onChange={(val) => setContent(val || '')}

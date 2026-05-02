@@ -19,7 +19,7 @@
 - 评论区 (Giscus)
 - 响应式设计，支持暗色/亮色主题自动切换
 - Material You 莫奈取色：主题配色从背景图片自动提取
-- 管理员鉴权系统（Token 认证）
+- 管理员鉴权系统（Session Token + 限流保护）
 - 静态站点生成 (SSG)
 
 ## 快速开始
@@ -58,28 +58,31 @@ npm start
 ## 目录结构
 
 ```
-├── app/                    # Next.js App Router
-│   ├── layout.tsx         # 根布局
-│   ├── page.tsx          # 首页（导航中心）
-│   ├── globals.css       # 全局样式
-│   ├── posts/[id]/       # 文章详情页
-│   ├── posts/page.tsx    # 文章列表页
-│   ├── create/           # 文章编辑页
-│   ├── login/            # 管理员登录页
-│   └── api/              # API 路由
-│       ├── posts/        # 文章 API
-│       └── auth/login/   # 登录 API
-├── components/            # React 组件
-│   ├── Comments.tsx      # 评论区组件
-│   ├── ThemeProvider.tsx # 主题提供者（莫奈取色）
-│   └── ThemeToggle.tsx   # 主题切换组件
-├── utils/                 # 工具函数
-│   └── colorExtractor.ts # 颜色提取工具
-├── lib/                   # 工具函数
-│   └── posts.ts          # 文章处理逻辑
-├── posts/                 # Markdown 文章目录
-├── middleware.ts         # 路由中间件（鉴权保护）
-└── public/                # 静态资源
+├── app/                       # Next.js App Router
+│   ├── layout.tsx             # 根布局
+│   ├── page.tsx               # 首页（导航中心）
+│   ├── globals.css            # 全局样式 + Material Design 3 组件类
+│   ├── components/            # App 内组件
+│   │   ├── ThemeProvider.tsx  # 主题提供者（莫奈取色）
+│   │   └── ThemeToggle.tsx    # 主题切换组件
+│   ├── utils/
+│   │   └── colorExtractor.ts  # 颜色提取工具
+│   ├── lib/
+│   │   └── auth.ts            # 认证与会话管理
+│   ├── posts/[id]/            # 文章详情页 (SSG)
+│   ├── posts/page.tsx         # 文章列表页
+│   ├── create/                # 文章编辑页（需登录）
+│   ├── login/                 # 管理员登录页
+│   └── api/                   # API 路由
+│       ├── posts/             # 文章 API (GET + POST)
+│       └── auth/login/        # 登录 API (POST)
+├── components/
+│   └── Comments.tsx           # Giscus 评论区组件
+├── lib/
+│   └── posts.ts               # 文章数据层（Markdown 读取/渲染）
+├── middleware.ts               # 路由中间件（/create、/login 鉴权）
+├── posts/                     # Markdown 文章目录
+└── public/                    # 静态资源（background.jpg 等）
 ```
 
 ## 写作指南

@@ -31,23 +31,46 @@ function applySchemeToCss(scheme: Scheme, target: HTMLElement, isDark: boolean) 
   target.style.setProperty('--md-overlay-rgb', `${r}, ${g}, ${b}`)
 }
 
+const LOAD_TIMEOUT = 10_000 // 10 秒超时
+const themeCache = new Map<string, Theme | null>()
+
 export async function extractPaletteFromImage(imageUrl: string): Promise<Theme | null> {
-  return new Promise((resolve) => {
+  // 命中缓存直接返回
+  if (themeCache.has(imageUrl)) {
+    return themeCache.get(imageUrl)!
+  }
+
+  const theme = await new Promise<Theme | null>((resolve) => {
     const img = document.createElement('img')
     img.crossOrigin = 'anonymous'
 
+    const timeout = setTimeout(() => {
+      img.onload = null
+      img.onerror = null
+      img.src = ''
+      resolve(null)
+    }, LOAD_TIMEOUT)
+
     img.onload = async () => {
+      clearTimeout(timeout)
       try {
-        const theme = await themeFromImage(img)
-        resolve(theme)
+        const result = await themeFromImage(img)
+        img.src = ''
+        resolve(result)
       } catch {
         resolve(null)
       }
     }
 
-    img.onerror = () => resolve(null)
+    img.onerror = () => {
+      clearTimeout(timeout)
+      resolve(null)
+    }
     img.src = imageUrl
   })
+
+  themeCache.set(imageUrl, theme)
+  return theme
 }
 
 export function applyMcuTheme(theme: Theme, isDark: boolean) {

@@ -23,8 +23,43 @@ export async function GET() {
   }
 }
 
+// CSRF 保护：验证请求来源
+function isSameOrigin(request: NextRequest): boolean {
+  const origin = request.headers.get('origin')
+  const referer = request.headers.get('referer')
+  const host = request.headers.get('host') || ''
+
+  // 有 Origin 则必须匹配 Host
+  if (origin) {
+    try {
+      const originHost = new URL(origin).host
+      if (originHost !== host) return false
+    } catch {
+      return false
+    }
+  }
+
+  // 有 Referer 则必须匹配 Host
+  if (referer) {
+    try {
+      const refererHost = new URL(referer).host
+      if (refererHost !== host) return false
+    } catch {
+      return false
+    }
+  }
+
+  // 无 Origin 且无 Referer（如同站请求、curl）放行
+  return true
+}
+
 // 创建新文章（需要鉴权）
 export async function POST(request: NextRequest) {
+  // CSRF 检查
+  if (!isSameOrigin(request)) {
+    return NextResponse.json({ error: '非法的请求来源' }, { status: 403 });
+  }
+
   // 验证 session token
   const authToken = request.cookies.get('auth_token')?.value;
   if (!validateSession(authToken)) {
