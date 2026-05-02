@@ -5,8 +5,6 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ThemeToggle from "./components/ThemeToggle";
-import { validateSession } from "./lib/auth";
-
 export const metadata: Metadata = {
   title: "阿千の万事屋",
   description: "君埋泉下泥销骨，我寄人间雪满头。",
@@ -18,7 +16,8 @@ export const metadata: Metadata = {
 async function Header() {
   const cookieStore = await cookies();
   const authToken = cookieStore.get('auth_token')?.value;
-  const isLoggedIn = validateSession(authToken);
+  // 只检查 cookie 是否存在，实际验证由 API 层负责
+  const isLoggedIn = !!authToken;
 
   return (
     <header className="sticky top-0 z-50 md-nav-bar">
