@@ -5,6 +5,8 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ThemeToggle from "./components/ThemeToggle";
+import { getEarlyThemeScript } from "./utils/colorExtractor";
+
 export const metadata: Metadata = {
   title: "阿千の万事屋",
   description: "君埋泉下泥销骨，我寄人间雪满头。",
@@ -89,6 +91,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
+      <head>
+        {/* 使用原始 <script> 标签确保在首次绘制前同步执行，避免颜色闪烁 */}
+        <script
+          dangerouslySetInnerHTML={{ __html: getEarlyThemeScript() }}
+        />
+      </head>
       <body>
         <ThemeProvider>
           <div className="md-bg" />

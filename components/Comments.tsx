@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTheme } from "next-themes";
 
 interface GiscusConfig {
   repo: string;           // "owner/repo"
@@ -18,6 +19,7 @@ interface GiscusConfig {
 export default function Comments({ config }: { config: GiscusConfig }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -38,7 +40,7 @@ export default function Comments({ config }: { config: GiscusConfig }) {
     script.setAttribute("data-reactions-enabled", config.reactionsEnabled || "1");
     script.setAttribute("data-emit-metadata", config.emitMetadata || "0");
     script.setAttribute("data-input-position", config.inputPosition || "bottom");
-    script.setAttribute("data-theme", "preferred_color_scheme");
+    script.setAttribute("data-theme", resolvedTheme === "dark" ? "dark" : "light");
     script.setAttribute("data-lang", config.lang || "zh-CN");
     script.setAttribute("data-loading", "lazy");
     script.crossOrigin = "anonymous";
@@ -53,7 +55,18 @@ export default function Comments({ config }: { config: GiscusConfig }) {
         scriptRef.current = null;
       }
     };
-  }, [config]);
+  }, [config, resolvedTheme]);
+
+  // 主题切换时通知 Giscus iframe 更新
+  useEffect(() => {
+    const iframe = containerRef.current?.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+    if (!iframe) return;
+
+    iframe.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme: resolvedTheme === "dark" ? "dark" : "light" } } },
+      "https://giscus.app"
+    );
+  }, [resolvedTheme]);
 
   return (
     <div>
