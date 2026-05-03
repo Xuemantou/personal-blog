@@ -31,11 +31,12 @@ export async function getSortedPostsData() {
 
     return {
       id,
-      ...matterResult.data,
+      title: matterResult.data.title as string,
+      date: matterResult.data.date as string,
     };
   });
 
-  return allPostsData.sort((a: any, b: any) => {
+  return allPostsData.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {
