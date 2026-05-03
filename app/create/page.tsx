@@ -24,12 +24,14 @@ export default function CreatePost() {
     fetch('/api/auth/verify')
       .then((res) => {
         if (!res.ok) {
+          document.cookie = 'auth_token=; path=/; max-age=0';
           window.location.href = '/login?from=/create';
           return;
         }
         setAuthChecked(true);
       })
       .catch(() => {
+        document.cookie = 'auth_token=; path=/; max-age=0';
         window.location.href = '/login?from=/create';
       });
   }, []);
