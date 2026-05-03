@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ThemeToggle from "./components/ThemeToggle";
+import LogoutButton from "./components/LogoutButton";
 import { getEarlyThemeScript } from "./utils/colorExtractor";
 
 export const metadata: Metadata = {
@@ -48,9 +49,12 @@ async function Header() {
             文章
           </Link>
           {isLoggedIn && (
-            <Link href="/create" className="md-btn-filled no-underline">
-              ✍️ 写文章
-            </Link>
+            <>
+              <Link href="/create" className="md-btn-filled no-underline">
+                ✍️ 写文章
+              </Link>
+              <LogoutButton />
+            </>
           )}
           {!isLoggedIn && (
             <Link
