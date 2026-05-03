@@ -25,9 +25,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '认证失败' }, { status: 401 });
     }
 
-    // 检测是否使用 HTTPS
-    const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
-                    request.nextUrl.protocol === 'https:';
+    // 检测是否使用 HTTPS（通过 x-forwarded-proto header）
+    const proto = request.headers.get('x-forwarded-proto');
+    const isHttps = proto === 'https';
 
     // 生成随机 session token，创建会话
     const sessionToken = createSession();
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     cookieStore.set('auth_token', sessionToken, {
       httpOnly: true,
       secure: isHttps,
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 天
       path: '/',
     });
