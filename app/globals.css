@@ -265,7 +265,7 @@ body {
   border-radius: 0.75rem;
   box-shadow: var(--md-elevation-3);
   border: none;
-  background: var(--md-surface) !important;
+  background: var(--md-surface-dim) !important;
   color: var(--md-on-surface);
   padding: 1.25rem 1.5rem;
   overflow-x: auto;

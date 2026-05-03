@@ -43,7 +43,7 @@ export default function Home() {
         <h1 className="md-headline-large mb-4" style={{ color: '#FFFFFF' }}>
           
         </h1>
-        <p className="md-body-large" style={{ color: 'rgba(255,255,255,0.78)' }}>
+        <p className="md-body-large" style={{ color: 'var(--md-on-surface-variant)' }}>
           君埋泉下泥销骨，我寄人间雪满头。
         </p>
       </section>
