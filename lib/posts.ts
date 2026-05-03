@@ -56,8 +56,9 @@ export async function getPostData(id: string) {
 
   return {
     id,
+    title: matterResult.data.title as string,
+    date: matterResult.data.date as string,
     contentHtml,
     readingTime: calculateReadingTime(matterResult.content),
-    ...matterResult.data,
   };
 }
