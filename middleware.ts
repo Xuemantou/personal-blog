@@ -19,6 +19,15 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // 保护 /admin 页面
+  if (pathname.startsWith('/admin')) {
+    if (!authToken) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('from', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
   // 登录页面如果已有 token 则跳过登录（实际验证由 API 层负责）
   if (pathname === '/login') {
     if (authToken) {
@@ -31,5 +40,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/create', '/login'],
+  matcher: ['/create', '/login', '/admin/:path*'],
 };

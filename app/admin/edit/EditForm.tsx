@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
@@ -11,32 +10,19 @@ const MDEditor = dynamic(
   { ssr: false }
 );
 
-export default function CreatePost() {
+interface EditFormProps {
+  id: string;
+  initialTitle: string;
+  initialContent: string;
+}
+
+export default function EditForm({ id, initialTitle, initialContent }: EditFormProps) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState(initialTitle);
+  const [content, setContent] = useState(initialContent);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/auth/verify')
-      .then((res) => {
-        if (!res.ok) {
-          fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
-            window.location.href = '/login?from=/create';
-          });
-          return;
-        }
-        setAuthChecked(true);
-      })
-      .catch(() => {
-        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
-          window.location.href = '/login?from=/create';
-        });
-      });
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,73 +30,61 @@ export default function CreatePost() {
     setMessage(null);
 
     try {
-      const response = await fetch('/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`/api/posts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, content }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', text: '文章创建成功！' });
+        setMessage({ type: 'success', text: '文章更新成功！' });
         setTimeout(() => {
-          router.push('/');
+          router.push('/admin');
         }, 1500);
+      } else if (response.status === 401) {
+        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+          window.location.href = '/login?from=/admin';
+        });
+        return;
       } else {
-        setMessage({ type: 'error', text: data.error || '创建失败' });
+        setMessage({ type: 'error', text: data.error || '更新失败' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: '网络错误，请重试' });
     } finally {
       setLoading(false);
     }
   };
 
-  if (!authChecked) {
-    return (
-      <main className="max-w-4xl mx-auto px-6 py-12">
-        <div className="md-surface p-8 text-center">
-          <p className="md-body-large" style={{ color: 'var(--md-on-surface-variant)' }}>
-            验证登录状态中...
-          </p>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="max-w-4xl mx-auto px-6 py-12">
-      {/* Back link */}
-      <Link
-        href="/"
+      <button
+        onClick={() => router.push('/admin')}
         className="md-btn-tonal inline-flex items-center gap-1 mb-6 no-underline"
       >
-        ← 返回首页
-      </Link>
+        ← 返回管理
+      </button>
 
       <div className="md-surface p-8 md:p-12">
-        {/* Title */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ background: 'var(--md-primary-container)' }}
             >
-              <span className="text-lg">✍️</span>
+              <span className="text-lg">✏️</span>
             </div>
             <h1 className="md-headline-medium" style={{ color: 'var(--md-on-surface)' }}>
-              创建新文章
+              编辑文章
             </h1>
           </div>
           <p className="md-body-large" style={{ color: 'var(--md-on-surface-variant)' }}>
-            使用 Markdown 格式编写你的文章
+            修改文章标题或内容
           </p>
         </div>
 
-        {/* Message */}
         {message && (
           <div
             className="mb-6 p-4 rounded-xl"
@@ -123,9 +97,7 @@ export default function CreatePost() {
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Title Input */}
           <div>
             <label
               htmlFor="title"
@@ -145,7 +117,6 @@ export default function CreatePost() {
             />
           </div>
 
-          {/* Content Editor */}
           <div>
             <label
               htmlFor="content"
@@ -165,13 +136,12 @@ export default function CreatePost() {
             </div>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
             className="md-btn-filled w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? '创建中...' : '发布文章'}
+            {loading ? '保存中...' : '保存修改'}
           </button>
         </form>
       </div>

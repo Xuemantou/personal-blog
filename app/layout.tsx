@@ -50,6 +50,9 @@ async function Header() {
           </Link>
           {isLoggedIn && (
             <>
+              <Link href="/admin" className="md-btn-tonal no-underline">
+                📋 管理
+              </Link>
               <Link href="/create" className="md-btn-filled no-underline">
                 ✍️ 写文章
               </Link>

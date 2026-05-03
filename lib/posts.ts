@@ -63,3 +63,38 @@ export async function getPostData(id: string) {
     readingTime: calculateReadingTime(matterResult.content),
   };
 }
+
+export function getRawPostData(id: string) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const matterResult = matter(fileContents);
+
+  return {
+    id,
+    title: matterResult.data.title as string,
+    date: matterResult.data.date as string,
+    content: matterResult.content as string,
+  };
+}
+
+export function updatePost(id: string, title: string, content: string) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const matterResult = matter(fileContents);
+  const date = matterResult.data.date as string;
+
+  const markdown = `---
+title: "${title}"
+date: "${date}"
+---
+
+${content}
+`;
+
+  fs.writeFileSync(fullPath, markdown, "utf8");
+}
+
+export function deletePost(id: string) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  fs.unlinkSync(fullPath);
+}
