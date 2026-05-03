@@ -1,11 +1,10 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get('from') || '/create';
   const [password, setPassword] = useState('');
@@ -27,7 +26,7 @@ function LoginForm() {
       const data = await response.json();
 
       if (response.ok) {
-        router.push(from);
+        window.location.href = from;
       } else if (response.status === 429) {
         setError(data.error || '操作过于频繁，请稍后再试');
       } else {

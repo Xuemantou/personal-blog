@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
 
     // 生成随机 session token，创建会话
     const sessionToken = createSession();
-    const cookieStore = await cookies();
-    cookieStore.set('auth_token', sessionToken, {
+    const response = NextResponse.json({ success: true });
+    response.cookies.set('auth_token', sessionToken, {
       httpOnly: true,
       secure: isHttps,
       sameSite: 'lax',
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       path: '/',
     });
 
-    return NextResponse.json({ success: true });
+    return response;
   } catch {
     return NextResponse.json({ error: '请求处理失败' }, { status: 500 });
   }
