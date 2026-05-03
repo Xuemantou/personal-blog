@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -18,6 +18,21 @@ export default function CreatePost() {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/auth/verify')
+      .then((res) => {
+        if (!res.ok) {
+          window.location.href = '/login?from=/create';
+          return;
+        }
+        setAuthChecked(true);
+      })
+      .catch(() => {
+        window.location.href = '/login?from=/create';
+      });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +64,18 @@ export default function CreatePost() {
       setLoading(false);
     }
   };
+
+  if (!authChecked) {
+    return (
+      <main className="max-w-4xl mx-auto px-6 py-12">
+        <div className="md-surface p-8 text-center">
+          <p className="md-body-large" style={{ color: 'var(--md-on-surface-variant)' }}>
+            验证登录状态中...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-12">
