@@ -25,12 +25,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '认证失败' }, { status: 401 });
     }
 
+    // 检测是否使用 HTTPS
+    const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
+                    request.nextUrl.protocol === 'https:';
+
     // 生成随机 session token，创建会话
     const sessionToken = createSession();
     const cookieStore = await cookies();
     cookieStore.set('auth_token', sessionToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isHttps,
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 7, // 7 天
       path: '/',
