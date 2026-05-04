@@ -42,38 +42,36 @@ export default async function AdminPage() {
         {allPostsData.map(({ id, date, title }) => (
           <article
             key={id}
-            className="md-surface p-6 transition-all duration-200 hover:shadow-lg"
+            className="md-surface p-4 md:p-6 transition-all duration-200 hover:shadow-lg"
             style={{ boxShadow: 'var(--md-elevation-2)' }}
           >
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-start gap-4 flex-1 min-w-0">
-                <div
-                  className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: 'var(--md-primary-container)' }}
+            <div className="flex items-start gap-3 md:gap-4">
+              <div
+                className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: 'var(--md-primary-container)' }}
+              >
+                <span className="text-lg">📝</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3
+                  className="md-title-large mb-2 truncate"
+                  style={{ color: 'var(--md-on-surface)' }}
                 >
-                  <span className="text-lg">📝</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3
-                    className="md-title-large mb-2 truncate"
-                    style={{ color: 'var(--md-on-surface)' }}
-                  >
-                    {title}
-                  </h3>
+                  {title}
+                </h3>
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="md-chip">
                     <span style={{ color: 'var(--md-primary)' }}>●</span>
                     {date}
                   </span>
+                  <Link
+                    href={`/admin/edit/${id}`}
+                    className="md-btn-tonal no-underline"
+                  >
+                    ✏️<span className="hidden md:inline">编辑</span>
+                  </Link>
+                  <AdminActions id={id} title={title} />
                 </div>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <Link
-                  href={`/admin/edit/${id}`}
-                  className="md-btn-tonal no-underline"
-                >
-                  编辑
-                </Link>
-                <AdminActions id={id} title={title} />
               </div>
             </div>
           </article>

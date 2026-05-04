@@ -24,16 +24,16 @@ async function Header() {
 
   return (
     <header className="sticky top-0 z-50 md-nav-bar">
-      <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-4xl mx-auto px-4 py-3 md:px-6 md:py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 no-underline">
           <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
             <Image src="/profile icon.jpg" alt="logo" width={40} height={40} className="object-cover" />
           </div>
-          <span className="md-title-large" style={{ color: 'var(--md-on-surface)' }}>
+          <span className="md-title-large hidden md:inline" style={{ color: 'var(--md-on-surface)' }}>
             阿千の万事屋
           </span>
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-2 md:gap-4">
           <Link
             href="/"
             className="md-label-large no-underline"
@@ -51,10 +51,10 @@ async function Header() {
           {isLoggedIn && (
             <>
               <Link href="/admin" className="md-btn-tonal no-underline">
-                📋 管理
+                📋<span className="hidden md:inline">管理</span>
               </Link>
               <Link href="/create" className="md-btn-filled no-underline">
-                ✍️ 写文章
+                ✍️<span className="hidden md:inline">写文章</span>
               </Link>
               <LogoutButton />
             </>
