@@ -42,7 +42,7 @@ export default async function AdminPage() {
         {allPostsData.map(({ id, date, title }) => (
           <article
             key={id}
-            className="md-surface p-4 md:p-6 transition-all duration-200 hover:shadow-lg"
+            className="md-surface p-4 md:p-6 transition-all duration-200 hover:shadow-lg overflow-hidden"
             style={{ boxShadow: 'var(--md-elevation-2)' }}
           >
             <div className="flex items-start gap-3 md:gap-4">
@@ -54,8 +54,8 @@ export default async function AdminPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <h3
-                  className="md-title-large mb-2 truncate"
-                  style={{ color: 'var(--md-on-surface)' }}
+                  className="md-title-large mb-2"
+                  style={{ color: 'var(--md-on-surface)', wordBreak: 'break-word' }}
                 >
                   {title}
                 </h3>
