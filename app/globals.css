@@ -20,7 +20,7 @@
   --md-error: #B3261E;
   --md-on-error: #FFFFFF;
   --md-error-container: #F9DEDC;
-  --md-code-bg: #D2DFEC;
+  --md-surface-container-high: #D2DFEC;
 
   /* Elevation shadows - 深蓝调阴影 */
   --md-elevation-1: 0 1px 3px rgba(10, 30, 55, 0.12), 0 1px 2px rgba(10, 30, 55, 0.08);
@@ -238,7 +238,7 @@ body {
   --md-error: #F2B8B5;
   --md-on-error: #601410;
   --md-error-container: #8C1D18;
-  --md-code-bg: #1E3550;
+  --md-surface-container-high: #1E3550;
 
   /* 深色主题阴影：纯黑系，比背景更深才有层次感 */
   --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -267,7 +267,7 @@ body {
   border-radius: 0.75rem;
   box-shadow: var(--md-elevation-3);
   border: none;
-  background: var(--md-code-bg) !important;
+  background: var(--md-surface-container-high) !important;
   color: var(--md-on-surface);
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
