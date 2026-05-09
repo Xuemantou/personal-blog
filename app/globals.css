@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
 :root {
   /* Material 3 Color System - 海港蓝主题 */
   --md-primary: #3A6EA5;

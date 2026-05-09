@@ -11,6 +11,7 @@
     "@giscus/react": "^3.1.0",
     "@material/material-color-utilities": "^0.4.0",
     "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/typography": "^0.5.19",
     "@uiw/react-md-editor": "^4.1.0",
     "gray-matter": "^4.0.3",
     "next": "^15.5.15",
