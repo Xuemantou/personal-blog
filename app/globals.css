@@ -113,6 +113,11 @@ body {
   border-radius: 1rem;
   box-shadow: var(--md-elevation-2);
   color: var(--md-on-surface);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.md-surface:hover {
+  box-shadow: var(--md-elevation-4);
 }
 
 .md-surface-dim {

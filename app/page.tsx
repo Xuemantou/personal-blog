@@ -54,8 +54,8 @@ export default function Home() {
             <a
               key={item.title}
               href={item.href}
-              className="md-surface p-8 text-center no-underline transition-all duration-200 hover:shadow-xl"
-              style={{ boxShadow: 'var(--md-elevation-3)', textDecoration: 'none' }}
+              className="md-surface p-8 text-center no-underline"
+              style={{ textDecoration: 'none' }}
             >
               <div
                 className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
