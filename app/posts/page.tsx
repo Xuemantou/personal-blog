@@ -14,8 +14,7 @@ export default async function PostsPage() {
         {allPostsData.map(({ id, date, title }) => (
           <article
             key={id}
-            className="md-surface p-6 transition-all duration-200 hover:shadow-lg"
-            style={{ boxShadow: 'var(--md-elevation-2)' }}
+            className="md-surface p-6"
           >
             <Link href={`/posts/${id}`} className="block no-underline">
               <div className="flex items-start gap-4">

@@ -12,7 +12,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       attribute="data-theme"
       defaultTheme="system"
       enableSystem
-      disableTransitionOnChange
     >
       <MonetLoader>{children}</MonetLoader>
     </NextThemesProvider>

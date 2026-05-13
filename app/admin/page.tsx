@@ -42,8 +42,7 @@ export default async function AdminPage() {
         {allPostsData.map(({ id, date, title }) => (
           <article
             key={id}
-            className="md-surface p-4 md:p-6 transition-all duration-200 hover:shadow-lg overflow-hidden"
-            style={{ boxShadow: 'var(--md-elevation-2)' }}
+            className="md-surface p-4 md:p-6 overflow-hidden"
           >
             <div className="flex items-start gap-3 md:gap-4">
               <div
