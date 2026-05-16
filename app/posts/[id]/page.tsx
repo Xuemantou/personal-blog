@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Comments from "@/components/Comments";
 import PostContent from "./PostContent";
+import TableOfContents from "@/app/components/TableOfContents";
 
 export async function generateStaticParams() {
   const paths = await getAllPostIds();
@@ -27,57 +28,66 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
         ← 返回首页
       </Link>
 
-      {/* Article Title Section */}
-      <div className="mb-8">
-        <h1
-          className="md-headline-large mb-6"
-          style={{ color: 'var(--md-on-surface)' }}
-        >
-          {postData.title}
-        </h1>
-        <div className="flex items-center gap-4 flex-wrap">
-          <span
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
-            style={{
-              background: 'var(--md-primary)',
-              color: 'var(--md-on-primary)',
-            }}
-          >
-            📅 {postData.date}
-          </span>
-          <span className="md-body-medium" style={{ color: 'var(--md-on-surface-variant)' }}>
-            · 阅读时间约 {postData.readingTime} 分钟
-          </span>
-        </div>
-      </div>
-
-      {/* Article Content + TOC Sidebar */}
-      <PostContent contentHtml={postData.contentHtml} />
-
-      {/* Comments Section */}
-      <div className="md-surface p-8 md:p-10 mt-8">
-        <div className="flex items-center gap-4 mb-6">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ background: 'var(--md-secondary-container)' }}
-          >
-            <span className="text-lg">💬</span>
+      {/* Article Content + TOC Grid Layout */}
+      <div className="post-content-layout">
+        {/* Main Column: Title + Content + Comments */}
+        <div className="post-content-column">
+          {/* Article Title Section */}
+          <div className="mb-8">
+            <h1
+              className="md-headline-large mb-6"
+              style={{ color: 'var(--md-on-surface)' }}
+            >
+              {postData.title}
+            </h1>
+            <div className="flex items-center gap-4 flex-wrap">
+              <span
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
+                style={{
+                  background: 'var(--md-primary)',
+                  color: 'var(--md-on-primary)',
+                }}
+              >
+                📅 {postData.date}
+              </span>
+              <span className="md-body-medium" style={{ color: 'var(--md-on-surface-variant)' }}>
+                · 阅读时间约 {postData.readingTime} 分钟
+              </span>
+            </div>
           </div>
-          <h3 className="md-title-large" style={{ color: 'var(--md-on-surface)' }}>
-            评论区
-          </h3>
+
+          {/* Article Content */}
+          <PostContent contentHtml={postData.contentHtml} />
+
+          {/* Comments Section */}
+          <div className="md-surface p-8 md:p-10 mt-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: 'var(--md-secondary-container)' }}
+              >
+                <span className="text-lg">💬</span>
+              </div>
+              <h3 className="md-title-large" style={{ color: 'var(--md-on-surface)' }}>
+                评论区
+              </h3>
+            </div>
+            <Comments config={{
+              repo: process.env.NEXT_PUBLIC_GISCUS_REPO || "your-org/your-repo",
+              repoId: process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "YOUR_REPO_ID",
+              category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY || "Announcements",
+              categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "YOUR_CATEGORY_ID",
+              mapping: "pathname",
+              reactionsEnabled: "1",
+              emitMetadata: "0",
+              inputPosition: "bottom",
+              lang: "zh-CN",
+            }} />
+          </div>
         </div>
-        <Comments config={{
-          repo: process.env.NEXT_PUBLIC_GISCUS_REPO || "your-org/your-repo",
-          repoId: process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "YOUR_REPO_ID",
-          category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY || "Announcements",
-          categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "YOUR_CATEGORY_ID",
-          mapping: "pathname",
-          reactionsEnabled: "1",
-          emitMetadata: "0",
-          inputPosition: "bottom",
-          lang: "zh-CN",
-        }} />
+
+        {/* TOC Sidebar */}
+        <TableOfContents />
       </div>
     </main>
   );

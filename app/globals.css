@@ -357,12 +357,54 @@ body {
   flex-shrink: 0;
 }
 
-/* TOC 粘性定位 */
+/* TOC 定位 - 基础样式 */
 .md-toc-sticky {
-  position: sticky;
-  top: 6rem;
+  width: 16rem;
   max-height: calc(100vh - 8rem);
   overflow-y: auto;
+  z-index: 40;
+}
+
+/* 布局容器 - 默认 Flex 布局 */
+.post-content-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+/* 主内容列 - 默认占满剩余空间 */
+.post-content-column {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 中等屏幕（1024-1535px）：sticky 跟随文章内容，半透明背景 */
+@media (min-width: 1024px) and (max-width: 1535px) {
+  .md-toc-sticky {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .md-toc {
+    background: var(--md-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--md-elevation-2);
+  }
+}
+
+/* 大屏幕（≥1536px）：fixed 定位 */
+@media (min-width: 1536px) {
+  .md-toc-sidebar {
+    width: 0;
+    overflow: visible;
+  }
+
+  .md-toc-sticky {
+    position: fixed;
+    top: 6rem;
+    right: 2rem;
+  }
 }
 
 /* TOC 面板 */

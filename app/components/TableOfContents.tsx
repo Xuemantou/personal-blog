@@ -9,11 +9,7 @@ interface Heading {
   element: HTMLElement;
 }
 
-interface TableOfContentsProps {
-  contentRef: React.RefObject<HTMLElement | null>;
-}
-
-export default function TableOfContents({ contentRef }: TableOfContentsProps) {
+export default function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState<string>("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -21,7 +17,7 @@ export default function TableOfContents({ contentRef }: TableOfContentsProps) {
 
   // 从文章内容中提取标题
   useEffect(() => {
-    const container = contentRef.current;
+    const container = document.getElementById("post-content");
     if (!container) return;
 
     const elements = container.querySelectorAll("h2, h3");
@@ -39,7 +35,7 @@ export default function TableOfContents({ contentRef }: TableOfContentsProps) {
     });
 
     setHeadings(extracted);
-  }, [contentRef]);
+  }, []);
 
   // 设置 Intersection Observer 监听滚动
   useEffect(() => {

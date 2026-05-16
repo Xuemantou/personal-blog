@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import TableOfContents from "@/app/components/TableOfContents";
+import { useRef, useEffect } from "react";
 
 interface PostContentProps {
   contentHtml: string;
@@ -10,19 +9,27 @@ interface PostContentProps {
 export default function PostContent({ contentHtml }: PostContentProps) {
   const contentRef = useRef<HTMLDivElement>(null);
 
-  return (
-    <div className="flex gap-8 items-start">
-      {/* 主内容区 */}
-      <article className="flex-1 min-w-0 md-surface p-8 md:p-12">
-        <div
-          ref={contentRef}
-          className="prose prose-material"
-          dangerouslySetInnerHTML={{ __html: contentHtml }}
-        />
-      </article>
+  // 为标题添加 id，供 TOC 使用
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container) return;
 
-      {/* TOC 侧边栏 */}
-      <TableOfContents contentRef={contentRef} />
-    </div>
+    const headings = container.querySelectorAll("h2, h3");
+    headings.forEach((heading, index) => {
+      if (!heading.id) {
+        heading.id = `heading-${index}`;
+      }
+    });
+  }, [contentHtml]);
+
+  return (
+    <article className="md-surface p-8 md:p-12">
+      <div
+        ref={contentRef}
+        id="post-content"
+        className="prose prose-material"
+        dangerouslySetInnerHTML={{ __html: contentHtml }}
+      />
+    </article>
   );
 }
