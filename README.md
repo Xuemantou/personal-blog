@@ -21,6 +21,7 @@
 - Material You 莫奈取色：主题配色从背景图片自动提取
 - 管理员鉴权系统（Session Token + 限流保护）
 - 静态站点生成 (SSG)
+- 文章目录（TOC）：自动提取标题生成目录，支持滚动高亮和点击跳转
 
 ## 快速开始
 
@@ -64,12 +65,15 @@ npm start
 │   ├── globals.css            # 全局样式 + Material Design 3 组件类
 │   ├── components/            # App 内组件
 │   │   ├── ThemeProvider.tsx  # 主题提供者（莫奈取色）
-│   │   └── ThemeToggle.tsx    # 主题切换组件
+│   │   ├── ThemeToggle.tsx    # 主题切换组件
+│   │   └── TableOfContents.tsx # 文章目录组件（TOC）
 │   ├── utils/
 │   │   └── colorExtractor.ts  # 颜色提取工具
 │   ├── lib/
 │   │   └── auth.ts            # 认证与会话管理
 │   ├── posts/[id]/            # 文章详情页 (SSG)
+│   │   ├── page.tsx           # 文章页面布局
+│   │   └── PostContent.tsx    # 文章内容组件
 │   ├── posts/page.tsx         # 文章列表页
 │   ├── create/                # 文章编辑页（需登录）
 │   ├── login/                 # 管理员登录页

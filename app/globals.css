@@ -348,3 +348,203 @@ body {
     font-size: 0.8125rem;
   }
 }
+
+/* ===== Table of Contents ===== */
+
+/* TOC 侧边栏容器 */
+.md-toc-sidebar {
+  width: 16rem;
+  flex-shrink: 0;
+}
+
+/* TOC 定位 - 基础样式 */
+.md-toc-sticky {
+  width: 16rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  z-index: 40;
+}
+
+/* 布局容器 - 默认 Flex 布局 */
+.post-content-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+/* 主内容列 - 默认占满剩余空间 */
+.post-content-column {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 中等屏幕（1024-1535px）：sticky 跟随文章内容，半透明背景 */
+@media (min-width: 1024px) and (max-width: 1535px) {
+  .md-toc-sticky {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .md-toc {
+    background: var(--md-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--md-elevation-2);
+  }
+}
+
+/* 大屏幕（≥1536px）：fixed 定位 */
+@media (min-width: 1536px) {
+  .md-toc-sidebar {
+    width: 0;
+    overflow: visible;
+  }
+
+  .md-toc-sticky {
+    position: fixed;
+    top: 6rem;
+    right: 2rem;
+  }
+}
+
+/* TOC 面板 */
+.md-toc {
+  background: var(--md-surface-container-high);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: var(--md-elevation-1);
+}
+
+/* TOC 标题 */
+.md-toc-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--md-on-surface);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* TOC 列表 */
+.md-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 2px solid var(--md-outline-variant);
+}
+
+/* TOC 项目 */
+.md-toc-item {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  border-left: 2px solid transparent;
+  margin-left: -2px;
+  line-height: 1.4;
+}
+
+.md-toc-item:hover {
+  color: var(--md-on-surface);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.md-toc-item--h3 {
+  padding-left: 1.5rem;
+  font-size: 0.75rem;
+}
+
+/* 高亮状态 */
+.md-toc-item--active {
+  color: var(--md-primary);
+  border-left-color: var(--md-primary);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .md-toc-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* 移动端浮动按钮 */
+.md-toc-fab {
+  display: none;
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  box-shadow: var(--md-elevation-3);
+  z-index: 50;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.md-toc-fab:hover {
+  box-shadow: var(--md-elevation-4);
+  transform: scale(1.05);
+}
+
+@media (max-width: 1023px) {
+  .md-toc-fab {
+    display: flex;
+  }
+}
+
+/* 移动端抽屉遮罩 */
+.md-toc-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.md-toc-drawer-overlay--open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 移动端抽屉内容 */
+.md-toc-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  max-height: 70vh;
+  background: var(--md-surface);
+  border-radius: 1rem 1rem 0 0;
+  padding: 1.5rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.md-toc-drawer--open {
+  transform: translateY(0);
+}
+
+/* 抽屉把手 */
+.md-toc-drawer-handle {
+  width: 2rem;
+  height: 0.25rem;
+  background: var(--md-outline-variant);
+  border-radius: 9999px;
+  margin: 0 auto 1rem;
+}
+
+/* 标题滚动偏移 */
+.prose-material h2,
+.prose-material h3 {
+  scroll-margin-top: 5rem;
+}
