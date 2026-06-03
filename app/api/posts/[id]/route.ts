@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { validateSession } from '@/app/lib/auth';
-import { updatePost, deletePost } from '@/lib/posts';
+import { updatePost, deletePost, getRawPostData } from '@/lib/posts';
 import { revalidatePath } from 'next/cache';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
@@ -38,7 +38,7 @@ function postExists(id: string): boolean {
   return fs.existsSync(fullPath);
 }
 
-// 更新文章
+// 更新文章（支持 draft 参数）
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -60,13 +60,18 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { title, content } = body;
+    const { title, content, draft } = body;
 
-    if (!title || !content) {
-      return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
+    // 如果只传了 draft（切换草稿状态），需要保留原标题和内容
+    if (draft !== undefined && (!title || !content)) {
+      const existing = getRawPostData(id);
+      updatePost(id, existing.title, existing.content, { draft: !!draft });
+    } else {
+      if (!title || !content) {
+        return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
+      }
+      updatePost(id, title, content, { draft: !!draft });
     }
-
-    updatePost(id, title, content);
 
     revalidatePath('/posts');
     revalidatePath(`/posts/${id}`);

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
+import { useDraftAutosave } from '@/app/hooks/useDraftAutosave';
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
@@ -24,6 +25,9 @@ export default function EditForm({ id, initialTitle, initialContent }: EditFormP
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // localStorage 自动保存
+  const { clearDraft } = useDraftAutosave(`edit-${id}`, title, content);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -39,6 +43,7 @@ export default function EditForm({ id, initialTitle, initialContent }: EditFormP
       const data = await response.json();
 
       if (response.ok) {
+        clearDraft();
         setMessage({ type: 'success', text: '文章更新成功！' });
         setTimeout(() => {
           router.push('/admin');

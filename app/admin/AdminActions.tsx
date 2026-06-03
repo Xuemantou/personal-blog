@@ -6,12 +6,39 @@ import { useRouter } from 'next/navigation';
 interface AdminActionsProps {
   id: string;
   title: string;
+  draft?: boolean;
 }
 
-export default function AdminActions({ id, title }: AdminActionsProps) {
+export default function AdminActions({ id, title, draft }: AdminActionsProps) {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+
+  const handlePublish = async () => {
+    setPublishing(true);
+    try {
+      const response = await fetch(`/api/posts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ draft: false }),
+      });
+      if (response.ok) {
+        router.refresh();
+      } else if (response.status === 401) {
+        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+          window.location.href = '/login?from=/admin';
+        });
+      } else {
+        const data = await response.json();
+        alert(data.error || '发布失败');
+      }
+    } catch {
+      alert('网络错误，请重试');
+    } finally {
+      setPublishing(false);
+    }
+  };
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -38,6 +65,19 @@ export default function AdminActions({ id, title }: AdminActionsProps) {
 
   return (
     <>
+      {draft && (
+        <button
+          onClick={handlePublish}
+          disabled={publishing}
+          className="px-3 md:px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50"
+          style={{
+            background: 'var(--md-primary-container)',
+            color: 'var(--md-on-primary-container)',
+          }}
+        >
+          {publishing ? '发布中...' : '📤'} <span className="hidden md:inline">{publishing ? '发布中...' : '发布'}</span>
+        </button>
+      )}
       <button
         onClick={() => setShowConfirm(true)}
         className="px-3 md:px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 hover:brightness-110"

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
+import { useDraftAutosave } from '@/app/hooks/useDraftAutosave';
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
@@ -19,6 +20,10 @@ export default function CreatePost() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [draftId, setDraftId] = useState<string | null>(null);
+
+  // localStorage 自动保存
+  const { hasSavedDraft, restoreDraft, clearDraft } = useDraftAutosave('new', title, content);
 
   useEffect(() => {
     fetch('/api/auth/verify')
@@ -38,31 +43,89 @@ export default function CreatePost() {
       });
   }, []);
 
+  const handleRestoreDraft = () => {
+    const draft = restoreDraft();
+    if (draft) {
+      setTitle(draft.title);
+      setContent(draft.content);
+      setMessage({
+        type: 'success',
+        text: `已恢复草稿（上次保存：${new Date(draft.updatedAt).toLocaleString('zh-CN')}）`,
+      });
+    }
+  };
+
+  const handleDismissRestore = () => {
+    clearDraft();
+  };
+
+  const handleSaveDraft = async () => {
+    if (!title.trim() && !content.trim()) {
+      setMessage({ type: 'error', text: '标题和内容不能都为空' });
+      return;
+    }
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const method = draftId ? 'PUT' : 'POST';
+      const url = draftId ? `/api/posts/${draftId}` : '/api/posts';
+      const body: Record<string, unknown> = { title: title || '未命名草稿', content, draft: true };
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        clearDraft();
+        if (!draftId && data.id) setDraftId(data.id);
+        setMessage({ type: 'success', text: '草稿已保存！' });
+      } else if (response.status === 401) {
+        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+          window.location.href = '/login?from=/create';
+        });
+      } else {
+        setMessage({ type: 'error', text: data.error || '保存草稿失败' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: '网络错误，请重试' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
 
     try {
-      const response = await fetch('/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, content }),
+      const method = draftId ? 'PUT' : 'POST';
+      const url = draftId ? `/api/posts/${draftId}` : '/api/posts';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, draft: false }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', text: '文章创建成功！' });
+        clearDraft();
+        setMessage({ type: 'success', text: '文章发布成功！' });
         setTimeout(() => {
           router.push('/');
         }, 1500);
       } else {
-        setMessage({ type: 'error', text: data.error || '创建失败' });
+        setMessage({ type: 'error', text: data.error || '发布失败' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: '网络错误，请重试' });
     } finally {
       setLoading(false);
@@ -99,16 +162,42 @@ export default function CreatePost() {
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ background: 'var(--md-primary-container)' }}
             >
-              <span className="text-lg">✍️</span>
+              <span className="text-lg">{draftId ? '📝' : '✍️'}</span>
             </div>
             <h1 className="md-headline-medium" style={{ color: 'var(--md-on-surface)' }}>
-              创建新文章
+              {draftId ? '编辑草稿' : '创建新文章'}
             </h1>
           </div>
           <p className="md-body-large" style={{ color: 'var(--md-on-surface-variant)' }}>
             使用 Markdown 格式编写你的文章
           </p>
         </div>
+
+        {/* Draft restore banner */}
+        {hasSavedDraft && !draftId && (
+          <div
+            className="mb-6 p-4 rounded-xl flex items-center justify-between gap-4 flex-wrap"
+            style={{ background: 'var(--md-tertiary-container)', color: 'var(--md-on-tertiary-container)' }}
+          >
+            <span className="md-body-medium">检测到本地未保存的草稿</span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={handleRestoreDraft}
+                className="md-btn-filled"
+              >
+                恢复草稿
+              </button>
+              <button
+                type="button"
+                onClick={handleDismissRestore}
+                className="md-btn-tonal"
+              >
+                丢弃
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Message */}
         {message && (
@@ -165,14 +254,24 @@ export default function CreatePost() {
             </div>
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="md-btn-filled w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? '创建中...' : '发布文章'}
-          </button>
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="md-btn-filled flex-1 py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? '处理中...' : '发布文章'}
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveDraft}
+              disabled={loading}
+              className="md-btn-tonal flex-1 py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? '处理中...' : '保存草稿'}
+            </button>
+          </div>
         </form>
       </div>
     </main>

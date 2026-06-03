@@ -3,7 +3,7 @@ import { getRawPostData, getAllPostIds } from '@/lib/posts';
 import EditForm from '../EditForm';
 
 export async function generateStaticParams() {
-  const posts = getAllPostIds();
+  const posts = getAllPostIds({ includeDrafts: true });
   return posts;
 }
 
