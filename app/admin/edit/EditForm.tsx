@@ -15,9 +15,10 @@ interface EditFormProps {
   id: string;
   initialTitle: string;
   initialContent: string;
+  initialDraft: boolean;
 }
 
-export default function EditForm({ id, initialTitle, initialContent }: EditFormProps) {
+export default function EditForm({ id, initialTitle, initialContent, initialDraft }: EditFormProps) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
   const [title, setTitle] = useState(initialTitle);
@@ -28,6 +29,40 @@ export default function EditForm({ id, initialTitle, initialContent }: EditFormP
   // localStorage 自动保存
   const { clearDraft } = useDraftAutosave(`edit-${id}`, title, content);
 
+  const handleSaveDraft = async () => {
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch(`/api/posts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, draft: true }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        clearDraft();
+        setMessage({ type: 'success', text: '草稿已保存！' });
+        setTimeout(() => {
+          router.push('/admin');
+        }, 1500);
+      } else if (response.status === 401) {
+        fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+          window.location.href = '/login?from=/admin';
+        });
+        return;
+      } else {
+        setMessage({ type: 'error', text: data.error || '保存草稿失败' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: '网络错误，请重试' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -37,14 +72,14 @@ export default function EditForm({ id, initialTitle, initialContent }: EditFormP
       const response = await fetch(`/api/posts/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, draft: false }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         clearDraft();
-        setMessage({ type: 'success', text: '文章更新成功！' });
+        setMessage({ type: 'success', text: initialDraft ? '文章发布成功！' : '文章更新成功！' });
         setTimeout(() => {
           router.push('/admin');
         }, 1500);
@@ -82,11 +117,11 @@ export default function EditForm({ id, initialTitle, initialContent }: EditFormP
               <span className="text-lg">✏️</span>
             </div>
             <h1 className="md-headline-medium" style={{ color: 'var(--md-on-surface)' }}>
-              编辑文章
+              编辑文章{initialDraft && <span className="md-chip ml-3" style={{ background: 'var(--md-tertiary-container)', color: 'var(--md-on-tertiary-container)', fontSize: '0.75rem', verticalAlign: 'middle' }}>草稿</span>}
             </h1>
           </div>
           <p className="md-body-large" style={{ color: 'var(--md-on-surface-variant)' }}>
-            修改文章标题或内容
+            {initialDraft ? '编辑草稿内容，可直接发布或继续保存为草稿' : '修改文章标题或内容'}
           </p>
         </div>
 
@@ -141,13 +176,34 @@ export default function EditForm({ id, initialTitle, initialContent }: EditFormP
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="md-btn-filled w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? '保存中...' : '保存修改'}
-          </button>
+          {/* Action Buttons */}
+          {initialDraft ? (
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handleSaveDraft}
+                disabled={loading}
+                className="md-btn-tonal flex-1 py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? '处理中...' : '保存草稿'}
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="md-btn-filled flex-1 py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? '处理中...' : '发布'}
+              </button>
+            </div>
+          ) : (
+            <button
+              type="submit"
+              disabled={loading}
+              className="md-btn-filled w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? '保存中...' : '保存修改'}
+            </button>
+          )}
         </form>
       </div>
     </main>

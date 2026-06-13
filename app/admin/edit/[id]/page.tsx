@@ -15,7 +15,7 @@ export default async function EditPostPage({
   try {
     const { id } = await params;
     const post = getRawPostData(id);
-    return <EditForm id={post.id} initialTitle={post.title} initialContent={post.content} />;
+    return <EditForm id={post.id} initialTitle={post.title} initialContent={post.content} initialDraft={post.draft} />;
   } catch {
     notFound();
   }
