@@ -77,6 +77,12 @@ async function Header() {
 }
 
 function Footer() {
+  const icpNumber = process.env.NEXT_PUBLIC_ICP_NUMBER;
+  const psbNumber = process.env.NEXT_PUBLIC_PSB_NUMBER;
+
+  // 从公安备案号中提取数字编号用于链接
+  const psbCode = psbNumber?.match(/\d+/g)?.join('') || '';
+
   return (
     <footer className="mt-16 md-surface-dim">
       <div className="max-w-4xl mx-auto px-6 py-10 text-center">
@@ -86,6 +92,35 @@ function Footer() {
         <p className="md-body-medium mt-1" style={{ color: 'var(--md-outline)' }}>
           Powered by Next.js & Tailwind CSS
         </p>
+        {(icpNumber || psbNumber) && (
+          <div className="mt-4 flex items-center justify-center gap-4 flex-wrap text-xs" style={{ color: 'var(--md-outline)' }}>
+            {icpNumber && (
+              <a
+                href="https://beian.miit.gov.cn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+                style={{ color: 'var(--md-outline)' }}
+              >
+                {icpNumber}
+              </a>
+            )}
+            {psbNumber && (
+              <a
+                href={`http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${psbCode}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center gap-1"
+                style={{ color: 'var(--md-outline)' }}
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                {psbNumber}
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </footer>
   );
