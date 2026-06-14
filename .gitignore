@@ -32,5 +32,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# blog posts (managed on server)
+# 忽略 posts 目录下所有 .md 文件，但保留示例文章
 posts/*.md
+!posts/hello-world.md
